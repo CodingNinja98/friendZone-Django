@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+{% block mystyle %}
+<style>
+    .photo {
+        height: 200px;
+        width: 200px;
+        border-radius: 50%;
+        border: 10px solid white;
+        position: relative;
+        top: -90px;
+    }
+
+    .line {
+        word-spacing: 10px;
+        line-height: 70px;
+    }
+
+    .a {
+        display: inline;
+    }
+
+    .rg {
+        background: rgba(0, 0, 0, 0.8);
+        height: 70px;
+        text-align: center;
+    }
+
+    .buton {
+        background: blue;
+        border-radius: 25px;
+        width: 100%;
+    }
+
+    .smal {
+        text-align: left;
+        margin-left: 50px;
+    }
+
+    .publish {
+        border-radius: 25px;
+        width: 100%;
+        position: relative;
+    }
+
+    .len {
+        width: 100%;
+        position: relative;
+        top: 0px;
+    }
+
+    .play {
+        display: none !important;
+    }
+
+    .playbt {
+        display: none !important;
+    }
+
+    .back {
+        background:url("{% if profile.cover_pic %}/media/{{profile.cover_pic}}{% else%}/media/cover.jpg{% endif %}");
+        height: 400px;
+        padding-top: 300px;
+        background-size: cover;
+        width: 100%
+    }
+
+    @media screen and (max-width:700px) {
+        .a {
+            display: none !important;
+        }
+
+        .rg {
+            background: transparent;
+        }
+
+        .buton {
+            background: transparent;
+        }
+
+        .smal {
+            text-align: center;
+            margin-left: 0px;
+        }
+
+        .publish {
+            width: 50%;
+            top: -40px;
+            float: right;
+        }
+
+        .len {
+            width: 70%;
+            top: -60px;
+            float: right;
+            margin-right: 10px;
+        }
+
+        .play {
+            display: inline !important;
+            margin-left: 100px;
+            word-spacing: 15px;
+        }
+
+        .playbt {
+            display: inline !important;
+            margin-left: 20%;
+            border-radius: 25px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block timeline %}
+{% load static %}
+<div class="container">
+    <div class="row back">
+        <div class="col-md-12 rg">
+            <div class="row">
+                <div class="col-md-3">
+                    {% if profile.profile_pic %}
+                    <img src="/media/{{profile.profile_pic}}" class="photo">
+
+                    {% else %}
+                    <img src="/media/no_image.png" alt="" class="photo">
+                    {% endif %}
+                </div>
+                <div class="col-md-4 line">
+                    <a href="{% url 'project:time' %}" style="color:white;" class="a">Timeline</a>
+                    <a href="{% url 'project:abo' %}" style="color:white;" class="a">About</a>
+                    <a href="{% url 'project:alb' %}" style="color:blue;" class="a">Album</a>
+                    <a href="{% url 'project:friend' %}" style="color:white;" class="a">Friends</a>
+                </div>
+                <div class="col-md-3">
+                    <!-- <p style="color:white;line-height: 70px; margin-left: 50px;" class="a">{{fff}}followers</p> -->
+                </div>
+                <!-- <div class="col-md-2" style="line-height: 70px;">
+                        <button class="btn btn-primary text-white m-0 a" ><h6>Add Friend</h6></button>                        
+                    </div>                   -->
+            </div>
+        </div>
+
+        <!-- copied -->
+
+        <div class="col-sm-12 col-12 small" style="display:none">
+            <img src="/media/{{profile.profile_pic}}" class="photo">
+        </div>
+
+        <!-- end -->
+
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            &nbsp;
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <h4 class="text-primary smal">{{user.first_name}} {{user.last_name}}</h4>
+            <p class="text-muted smal">{{profile.profession}}</p>
+            <div class="play">
+                <a href="{% url 'project:time' %}" style="color:black;">Timeline</a>
+                <a href="{% url 'project:abo' %}" style="color:black;">About</a>
+                <a href="{% url 'project:alb' %}" style="color:blue;">Album</a>
+                <a href="{% url 'project:friend' %}" style="color:black;">Friends</a>
+            </div>
+            <div style="line-height: 70px;" class="playbt">
+                <button class="btn btn-primary text-white mb-5 mt-3 playbt">
+                    <h6>Add Friend</h6>
+                </button>
+            </div>
+        </div>
+        <div class="col-md-7">
+            <div class="row ">
+                {% for i in all %}
+                <div>
+                    <a href="#" data-toggle="modal" data-target="#mymodal{{i.id}}">
+                        <img src="/media/{{i.media}}" height="200" width="200" alt="" class="m-1">
+                    </a>
+
+                    <div class="modal fade" id="mymodal{{i.id}}">
+                        <div class="modal-dialog modal-lg">
+                            <img src="/media/{{i.media}}" height="400" width="900">
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-2">
+            <p class="text-muted">{{user.first_name}} {{user.last_name}} Activity</p>
+            {% for i in act %}
+            <!-- <p class="text-muted mb-1" style="border-left:2px solid green;"><a href="" class="text-primary" >{{i.user.user.first_name}}</a></p> -->
+            <p class="text-muted" style="border-left:2px solid green;">{{i.content}}</p>
+            <p class="text-muted">{{i.time}}</p>
+            <hr />
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

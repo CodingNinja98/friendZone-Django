@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="shortcut icon" href="{% static 'images/friendzone2.png' %}">
+    <script src="{% static 'jquery.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
+    <link href="https://fonts.googleapis.com/css?family=Acme|Satisfy" rel="stylesheet">
+    {% block mystyle %}
+
+    {% endblock %}
+    <style>
+        .logo {
+            border-radius: 50%;
+            height: 30px;
+            font-size: 25px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid" style="overflow:hidden;">
+        <div class="row">
+            <div class="col-md-12">
+                <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+                    <a href="{%url 'project:dash'%}" class="navbar-brand">
+                        <img src="{% static 'images/friendzone2.png' %}" alt="" class="logo">
+                        FriendZone</a>
+                    <button class="navbar-toggler" data-toggle="collapse" data-target="#mynav">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div id="mynav" class="collapse navbar-collapse">
+                        <ul class="navbar-nav ml-auto">
+                            <li class="nav-item"><a href="{% url 'project:dash' %}" class="nav-link">Home</a></li>
+                            <li class="nav-item"><a href="{% url 'project:find_friend' %}"
+                                    class="nav-link">FindFriends</a></li>
+                            <li class="nav-item"><a href="{% url 'project:friendRequest' %}" class="nav-link"><i
+                                        class="fas fa-user-friends"></i></a></li>
+                            <li class="nav-item"><a href="{% url 'project:messages' %}" class="nav-link"><i
+                                        class="far fa-comments"></i></a></li>
+                            <li class="nav-item"><a href="{% url 'project:notification'%}" class="nav-link"><i
+                                        class="fas fa-bell" onclick="hidenot('{{request.user.id}}')"></i> <sup
+                                        class="badge badge-pill badge-danger m-0 unreads" id=""
+                                        style="position:relative;top:-12px; left:-15px;">{{total}}</sup> </a> </li>
+                            <li class="nav-item"><a href="{% url 'project:basic' %}" class="nav-link"><i
+                                        class="fas fa-user-cog"></i></a></li>
+                            <li class="nav-item"><a href="{% url 'project:logout' %}" class="nav-link"><i
+                                        class="fas fa-sign-out-alt"></i></a></li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </div>
+        <script>
+        $(function(){
+            $.ajax({
+                url:"{% url 'project:checkn'%}",
+                type:'get',
+                data:{id:'{{user.id}}'},
+                success:function(data){
+                    
+                    $('.unreads').html(data);
+                    if(data==0){
+                        $('.unreads').removeClass('badge badge-danger badge-pill').html(' ');
+                    }
+                }
+            })
+        })
+        
+        </script>
+        <script>
+            function hidenot(id) {
+                // alert(id);
+                $.ajax({
+                    url: '{% url "project:hide_notification"%}',
+                    type: 'get',
+                    data: { id: id },
+                    success: function (data) {
+
+                        $('.unreads').removeClass('badge badge-pill badge-danger').html(' ');
+                    }
+                })
+            }
+        </script>
+        {% block mycode %}
+
+        {% endblock %}
+    </div>
+    {% block timeline %}
+    {% endblock %}
+    <hr style="background:linear-gradient(lightblue,skyblue); height:10px; border-radius: 50%;" />
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 col-sm-3">
+                    <img src="{% static 'images/friendzone2.png' %}" class="logo" />
+                    <span class="text-muted" style="font-weight:bold; font-size:30px;">FriendZone</span>
+                    <em>Connect with friends and the world around you on friendZone!!!
+                    </em>
+
+                </div>
+                <div class="col-md-2 col-sm-2 mt-3">
+
+                </div>
+                <div class="col-md-2 col-sm-2 mt-3">
+
+                </div>
+                <div class="col-md-2 col-sm-2 mt-3">
+
+                </div>
+                <div class="col-md-3 col-sm-3 mt-3">
+                    <p class="text-primary">Contact Us</p>
+                    <p>#C-86, Industrial Area, phase-7 Mohali, India</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    {% block myscript %}
+    {% endblock%}
+</body>
+
+</html>
